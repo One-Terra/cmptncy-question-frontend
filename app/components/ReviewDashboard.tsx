@@ -10,7 +10,7 @@ export default function ReviewDashboard() {
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
   const fetchQuestions = async () => {
@@ -47,10 +47,10 @@ export default function ReviewDashboard() {
       });
 
       if (!response.ok) throw new Error('Failed to submit review');
-      
+
       const result: ApiResponse<any> = await response.json();
       alert(result.message || 'Review submitted successfully!');
-      
+
       // Refresh list to show updated status
       await fetchQuestions();
     } catch (err: any) {
@@ -63,11 +63,11 @@ export default function ReviewDashboard() {
       {/* Sidebar */}
       <div className="w-[400px] flex flex-col border-r border-zinc-100 dark:border-white/5">
         <div className="p-8 border-b border-zinc-100 dark:border-white/5">
-          <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">Review Dashboard</h1>
+          <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">Cmptncy Review Dashboard</h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Pending items to review</p>
         </div>
-        <QuestionList 
-          questions={questions} 
+        <QuestionList
+          questions={questions}
           selectedId={selectedQuestion?.questionId}
           onSelect={setSelectedQuestion}
           isLoading={isLoading}
@@ -79,11 +79,11 @@ export default function ReviewDashboard() {
         {error ? (
           <div className="flex flex-col items-center justify-center h-full gap-4 text-center p-8">
             <div className="w-16 h-16 bg-rose-500/10 rounded-full flex items-center justify-center text-rose-500">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
             </div>
             <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Connection Error</h2>
             <p className="text-zinc-500 max-w-sm">{error}. Please make sure the backend API is running at {API_BASE_URL}.</p>
-            <button 
+            <button
               onClick={fetchQuestions}
               className="px-6 py-2 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-black rounded-lg font-medium hover:opacity-90"
             >
@@ -91,9 +91,9 @@ export default function ReviewDashboard() {
             </button>
           </div>
         ) : selectedQuestion ? (
-          <QuestionReviewForm 
-            question={selectedQuestion} 
-            onSubmit={handleReviewSubmit} 
+          <QuestionReviewForm
+            question={selectedQuestion}
+            onSubmit={handleReviewSubmit}
           />
         ) : !isLoading && (
           <div className="flex flex-col items-center justify-center h-full text-zinc-500">
