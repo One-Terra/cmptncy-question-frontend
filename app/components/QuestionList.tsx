@@ -31,24 +31,31 @@ export default function QuestionList({ questions, selectedId, onSelect, isLoadin
               : 'hover:bg-zinc-900/5 dark:hover:bg-white/5 hover:border-zinc-100 dark:hover:border-white/5'
             }`}
         >
-          <div className="flex w-full items-center justify-between">
-            <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400">{q.questionId}</span>
+          <div className="flex w-full items-start justify-between">
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-tighter">
+                {q.chapter} • {q.conceptDisplayName}
+              </span>
+              <span className="text-[10px] text-zinc-400 dark:text-zinc-600 italic">
+                {q.topic} › {q.subtopic}
+              </span>
+            </div>
             <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full uppercase tracking-wider
-              ${q.reviewStatus === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 
-                q.reviewStatus === 'REJECTED' ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400' : 
+              ${q.reviewStatus?.toUpperCase() === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 
+                q.reviewStatus?.toUpperCase() === 'REJECTED' ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400' : 
                 'bg-amber-500/10 text-amber-600 dark:text-amber-400'}`}>
-              {q.reviewStatus}
+              {q.reviewStatus || 'PENDING'}
             </span>
           </div>
           <p className="line-clamp-2 text-sm font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-black dark:group-hover:text-white">
-            {q.stemEnglish}
+            {q.stem}
           </p>
           <div className="flex gap-2 mt-1">
              <span className="text-[10px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-600 dark:text-zinc-400">
                {q.questionType}
              </span>
              <span className="text-[10px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-600 dark:text-zinc-400">
-               {q.difficultyLevel}
+               {q.difficulty}
              </span>
           </div>
         </button>

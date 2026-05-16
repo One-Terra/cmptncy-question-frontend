@@ -1,16 +1,44 @@
 export interface Question {
   questionId: string;
-  conceptIdPrimary: string;
-  conceptIdsSecondary?: string[];
+  format: string;
+  boardSection: string;
+  marksEquivalent: number;
+  workingRequired: boolean;
+  estimatedTimeSeconds: number;
+  isParametrisable: boolean;
+  lastBoardAppearance: any;
+  subject: string;
+  grade: string;
+  unitNo: number;
+  unitName: string;
+  chapter: string;
+  topic: string;
+  subtopic: string;
+  conceptDisplayName: string;
+  conceptTagPrimary: string;
+  conceptTagSecondary: string | null;
+  conceptDifficultyRank: number;
   questionType: string;
-  stemEnglish: string;
-  stemHindi?: string;
-  reviewStatus: string;
-  difficultyLevel: string;
-  marks: number;
-  correctOptionIds: string[];
-  options: string;
+  skillType: string;
+  bloomLevel: string;
+  difficulty: string;
+  difficultyBand: string;
+  boardWeightPriority: string;
+  stem: string;
+  options: string; // Stringified JSON array
+  correctOptionId: string;
+  explanation: string; // Stringified JSON object
+  distractorRationale: string; // Stringified JSON object
+  templateId: string | null;
+  templateFamily: string | null;
+  caseSetId: string | null;
+  language: string;
   status: string;
+  sourceType: string;
+  generatorPromptVersion: string;
+  reviewStatus: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ReviewRequest {

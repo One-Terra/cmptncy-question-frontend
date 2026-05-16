@@ -21,7 +21,11 @@ export default function ReviewDashboard() {
       if (!response.ok) throw new Error('Failed to fetch questions');
       const data: PaginatedResponse<Question> = await response.json();
       setQuestions(data.content);
-      if (data.content.length > 0 && !selectedQuestion) {
+      
+      if (selectedQuestion) {
+        const updated = data.content.find(q => q.questionId === selectedQuestion.questionId);
+        if (updated) setSelectedQuestion(updated);
+      } else if (data.content.length > 0) {
         setSelectedQuestion(data.content[0]);
       }
     } catch (err: any) {
@@ -94,6 +98,7 @@ export default function ReviewDashboard() {
           <QuestionReviewForm
             question={selectedQuestion}
             onSubmit={handleReviewSubmit}
+            onReviewChange={fetchQuestions}
           />
         ) : !isLoading && (
           <div className="flex flex-col items-center justify-center h-full text-zinc-500">
