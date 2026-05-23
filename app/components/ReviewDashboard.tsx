@@ -11,13 +11,13 @@ export default function ReviewDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://18.136.102.154';
+
 
   const fetchQuestions = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/questions?page=0&size=50&sortBy=questionId&direction=asc`);
+      const response = await fetch(`/api/questions?page=0&size=50&sortBy=questionId&direction=asc`);
       if (!response.ok) throw new Error('Failed to fetch questions');
       const data: PaginatedResponse<Question> = await response.json();
       setQuestions(data.content);
@@ -41,7 +41,7 @@ export default function ReviewDashboard() {
 
   const handleReviewSubmit = async (review: ReviewRequest) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/reviews`, {
+      const response = await fetch(`/api/reviews`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
