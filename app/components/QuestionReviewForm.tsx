@@ -57,7 +57,7 @@ export default function QuestionReviewForm({ question, onSubmit, onReviewChange 
   const handleDeleteReview = async () => {
     setIsSubmitting(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/api/reviews/question/${question.questionId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://18.136.102.154'}/api/reviews/question/${question.questionId}`, {
         method: 'DELETE',
       });
 

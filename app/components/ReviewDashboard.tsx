@@ -11,7 +11,7 @@ export default function ReviewDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://18.136.102.154';
 
   const fetchQuestions = async () => {
     setIsLoading(true);
