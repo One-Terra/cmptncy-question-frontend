@@ -31,9 +31,20 @@ export default function ReviewDashboard() {
     setIsLoading(true);
     setError(null);
     try {
+      // First request to get the dynamic total count
+      const initialUrl = selectedChapter 
+        ? `/api/questions?chapter=${encodeURIComponent(selectedChapter)}&page=0&size=1`
+        : `/api/questions?page=0&size=1`;
+        
+      const initialResponse = await fetch(initialUrl);
+      if (!initialResponse.ok) throw new Error('Failed to fetch initial questions data');
+      const initialData: PaginatedResponse<Question> = await initialResponse.json();
+      
+      const dynamicSize = initialData.totalElements > 0 ? initialData.totalElements : 1000;
+
       const url = selectedChapter 
-        ? `/api/questions?chapter=${encodeURIComponent(selectedChapter)}&page=0&size=200&sortBy=chapter&direction=asc`
-        : `/api/questions?page=0&size=200&sortBy=questionId&direction=asc`;
+        ? `/api/questions?chapter=${encodeURIComponent(selectedChapter)}&page=0&size=${dynamicSize}&sortBy=chapter&direction=asc`
+        : `/api/questions?page=0&size=${dynamicSize}&sortBy=questionId&direction=asc`;
         
       const response = await fetch(url);
       if (!response.ok) throw new Error('Failed to fetch questions');
