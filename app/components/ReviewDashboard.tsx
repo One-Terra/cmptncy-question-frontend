@@ -86,7 +86,7 @@ export default function ReviewDashboard() {
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
             </div>
             <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Connection Error</h2>
-            <p className="text-zinc-500 max-w-sm">{error}. Please make sure the backend API is running at {API_BASE_URL}.</p>
+            <p className="text-zinc-500 max-w-sm">{error}. Please make sure the backend API is running.</p>
             <button
               onClick={fetchQuestions}
               className="px-6 py-2 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-black rounded-lg font-medium hover:opacity-90"
