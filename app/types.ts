@@ -63,3 +63,8 @@ export interface PaginatedResponse<T> {
   size: number;
   number: number;
 }
+
+export interface ChapterCount {
+  chapter: string;
+  count: number;
+}

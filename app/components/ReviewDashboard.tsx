@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import QuestionList from './QuestionList';
 import QuestionReviewForm from './QuestionReviewForm';
-import { Question, ReviewRequest, PaginatedResponse, ApiResponse } from '../types';
+import { Question, ReviewRequest, PaginatedResponse, ApiResponse, ChapterCount } from '../types';
 
 export default function ReviewDashboard() {
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -13,11 +13,30 @@ export default function ReviewDashboard() {
 
 
 
+  const [chapterCounts, setChapterCounts] = useState<ChapterCount[]>([]);
+  const [selectedChapter, setSelectedChapter] = useState<string | null>(null);
+
+  const fetchChapterCounts = async () => {
+    try {
+      const response = await fetch(`/api/questions/chapter-counts`);
+      if (response.ok) {
+        const data = await response.json();
+        setChapterCounts(data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch chapter counts:', err);
+    }
+  };
+
   const fetchQuestions = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/questions?page=0&size=50&sortBy=questionId&direction=asc`);
+      const url = selectedChapter 
+        ? `/api/questions?chapter=${encodeURIComponent(selectedChapter)}&page=0&size=50&sortBy=questionId&direction=asc`
+        : `/api/questions?page=0&size=50&sortBy=questionId&direction=asc`;
+        
+      const response = await fetch(url);
       if (!response.ok) throw new Error('Failed to fetch questions');
       const data: PaginatedResponse<Question> = await response.json();
       setQuestions(data.content);
@@ -36,8 +55,12 @@ export default function ReviewDashboard() {
   };
 
   useEffect(() => {
-    fetchQuestions();
+    fetchChapterCounts();
   }, []);
+
+  useEffect(() => {
+    fetchQuestions();
+  }, [selectedChapter]);
 
   const handleReviewSubmit = async (review: ReviewRequest) => {
     try {
@@ -66,9 +89,45 @@ export default function ReviewDashboard() {
     <div className="flex h-screen w-full bg-white dark:bg-black overflow-hidden">
       {/* Sidebar */}
       <div className="w-[400px] flex flex-col border-r border-zinc-100 dark:border-white/5">
-        <div className="p-8 border-b border-zinc-100 dark:border-white/5">
+        <div className="p-8 border-b border-zinc-100 dark:border-white/5 flex-shrink-0">
           <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">Cmptncy Review Dashboard</h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Pending items to review</p>
+          
+          {/* Chapter Filter Dashboard */}
+          {chapterCounts.length > 0 && (
+            <div className="mt-6">
+              <h2 className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3">Filter by Chapter</h2>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setSelectedChapter(null)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all
+                    ${selectedChapter === null 
+                      ? 'bg-zinc-900 text-white dark:bg-white dark:text-black shadow-md' 
+                      : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700'}`}
+                >
+                  All
+                </button>
+                {chapterCounts.map((chapterCount) => (
+                  <button
+                    key={chapterCount.chapter}
+                    onClick={() => setSelectedChapter(chapterCount.chapter)}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold transition-all
+                      ${selectedChapter === chapterCount.chapter 
+                        ? 'bg-zinc-900 text-white dark:bg-white dark:text-black shadow-md' 
+                        : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700'}`}
+                  >
+                    <span className="max-w-[150px] truncate">{chapterCount.chapter}</span>
+                    <span className={`px-1.5 py-0.5 rounded-full text-[10px] 
+                      ${selectedChapter === chapterCount.chapter 
+                        ? 'bg-white/20 dark:bg-black/20' 
+                        : 'bg-zinc-200 dark:bg-zinc-700'}`}>
+                      {chapterCount.count}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         <QuestionList
           questions={questions}
