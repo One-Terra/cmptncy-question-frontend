@@ -20,10 +20,18 @@ async function handleProxy(request: NextRequest, { params }: { params: Promise<{
     }
   }
 
-  // Forward headers, filtering out host and content-length to avoid mismatches
+  // Forward headers, filtering out headers that might trigger CSRF/CORS/WAF blocks
   const headers = new Headers();
   request.headers.forEach((value, key) => {
-    if (key.toLowerCase() !== 'host' && key.toLowerCase() !== 'content-length') {
+    const k = key.toLowerCase();
+    if (
+      k !== 'host' &&
+      k !== 'content-length' &&
+      k !== 'origin' &&
+      k !== 'referer' &&
+      !k.startsWith('x-forwarded-') &&
+      !k.startsWith('x-vercel-')
+    ) {
       headers.set(key, value);
     }
   });
