@@ -5,7 +5,11 @@ import QuestionList from './QuestionList';
 import QuestionReviewForm from './QuestionReviewForm';
 import { Question, ReviewRequest, PaginatedResponse, ApiResponse, ChapterCount } from '../types';
 
-export default function ReviewDashboard() {
+interface ReviewDashboardProps {
+  onLogout?: () => void;
+}
+
+export default function ReviewDashboard({ onLogout }: ReviewDashboardProps = {}) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -113,7 +117,18 @@ export default function ReviewDashboard() {
       {/* Sidebar - Left */}
       <div className="w-[400px] flex flex-col border-r border-zinc-100 dark:border-white/5 bg-white dark:bg-black z-10">
         <div className="p-8 border-b border-zinc-100 dark:border-white/5 flex-shrink-0">
-          <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">Cmptncy Review Dashboard</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">Cmptncy Review Dashboard</h1>
+            {onLogout && (
+              <button
+                onClick={onLogout}
+                className="px-3 py-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 rounded-xl transition-all flex items-center gap-1"
+                title="Sign out of session"
+              >
+                Sign Out
+              </button>
+            )}
+          </div>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Pending items to review</p>
           
           {/* Chapter Filter Dashboard */}
